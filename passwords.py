@@ -1,16 +1,34 @@
 class Passwords:
 	"""docstring for Passwords"""
 	def __init__(self):
-		pass
+		self.UserIDs = []
+		self.passwords = []
+
+		self.UserAccount = [self.UserIDs, self.passwords]
 
 	def CreateUserID(self):
-		print("\n\nAm Create")
+		UserID = input("\n\nEnter your User ID: ")
+		
+		if UserID in self.UserIDs:
+			print("User ID already exit")
+		else:
+			password = input("Enter a password: ")
+
+			self.passwords.append(password)
+
+			self.UserIDs.append(UserID)
+
 
 	def ChangePassword(self):
 		print("\n\nAm Change Passwords")
 
 	def DislpayUserID(self):
-		print("\n\nAm Dislpay User ID")
+		print("UserID   :  Password")
+		for account in self.UserAccount:
+			print(account)
+
+		for item in self.UserIDs:
+			print(item)
 
 
 
