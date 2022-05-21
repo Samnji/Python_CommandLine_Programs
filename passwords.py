@@ -1,41 +1,64 @@
+import csv
+
 class Passwords:
 	def __init__(self):
-		self.UserIDs = []
-		self.passwords = []
-
-		self.UserAccount = [self.UserIDs, self.passwords]
+		self.file0 = open("accounts.csv", 'w')
 
 	def CreateUserID(self):
 		UserID = input("\n\nEnter your User ID: ")
 		
-		if UserID in self.UserIDs:
-			print("User ID already exit")
+		self.file= open("accounts.csv", 'r')
+		for row in self.file:
+			if UserID in row:
+				print("User ID already exit")
 		else:
+			self.file1= open("accounts.csv", 'a')
 			password = input("Enter a password: ")
 			strength = 0
+			length = False
+			lower = False
+			upper = False
+			symbol = False
+
 			print(len(password))
-			if len(password) > 8:
+
+			for item in password:
+				if len(password) >= 8:
+					length = True
+
+				elif item.islower():
+					lower = True
+
+				elif item.isupper():
+					upper = True
+
+				elif '!' or '£' or '$' or '%' or '&' or '<' or '*' or '@' in password:
+					symbol = True
+
+
+			if length:
 				strength += 1
 
+			elif lower:
+				strength += 1
+
+			elif upper:
+				strength += 1
 			print(strength)
-
-			self.passwords.append(password)
-
-			self.UserIDs.append(UserID)
-
+			self.file1.write(f'{UserID}, {password}\n')
 
 	def ChangePassword(self):
 		print("\n\nAm Change Passwords")
 
 	def DislpayUserID(self):
 		print("UserID   :  Password")
-		for account in self.UserAccount:
-			print(account)
 
-		for item in self.UserIDs:
-			print(item)
+		self.file2 = open("accounts.csv", 'r')
+		
+		for row in self.file2:
+			line = row.split(',')
 
-
+			print(f'{line[0]}  	:  {line[1]}')
 
 p = Passwords()
 
