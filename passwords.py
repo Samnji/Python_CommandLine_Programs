@@ -1,5 +1,4 @@
 class Passwords:
-	"""docstring for Passwords"""
 	def __init__(self):
 		self.UserIDs = []
 		self.passwords = []
@@ -13,6 +12,12 @@ class Passwords:
 			print("User ID already exit")
 		else:
 			password = input("Enter a password: ")
+			strength = 0
+			print(len(password))
+			if len(password) > 8:
+				strength += 1
+
+			print(strength)
 
 			self.passwords.append(password)
 
