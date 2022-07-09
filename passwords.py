@@ -2,68 +2,128 @@ import csv
 
 class Passwords:
 	def __init__(self):
-		self.file0 = open("accounts.csv", 'w')
+		self.file0 = open("accounts.csv", 'r')
+		self.user_ids = []
+		self.accounts = []
 
-	def CreateUserID(self):
-		UserID = input("\n\nEnter your User ID: ")
-		
-		self.file= open("accounts.csv", 'r')
-		for row in self.file:
-			if UserID in row:
-				print("User ID already exit")
-		else:
-			self.file1= open("accounts.csv", 'a')
-			password = input("Enter a password: ")
-			strength = 0
+
+		for row in self.file0:
+			line = row.split(', ')
+			self.accounts.append(line)
+
+		for item in self.accounts:
+			self.user_ids.append(item[0])
+		print(self.user_ids)
+		#print(self.accounts)
+	def checkScore():
+		while True:
+			score = 0
 			length = False
 			lower = False
 			upper = False
+			number = False
 			symbol = False
+			numbers = [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+			symbols = [ '!', '£', '$', '%', '&', '<', '*', '@', '#', '^']
 
-			print(len(password))
+
+			password = input("Enter a strong password: ")
+
+			if len(password) >= 8:
+				length = True
 
 			for item in password:
-				if len(password) >= 8:
-					length = True
-
-				elif item.islower():
+				if item.islower():
 					lower = True
 
 				elif item.isupper():
 					upper = True
 
-				elif '!' or '£' or '$' or '%' or '&' or '<' or '*' or '@' in password:
+				elif item in numbers:
+					number = True
+
+				elif item in symbols:
 					symbol = True
 
-
 			if length:
-				strength += 1
+				score = score + 1
 
-			elif lower:
-				strength += 1
+			if lower:
+				score = score + 1
 
-			elif upper:
-				strength += 1
-			print(strength)
-			self.file1.write(f'{UserID}, {password}\n')
+			if upper:
+				score = score + 1
 
-	def ChangePassword(self):
-		print("\n\nAm Change Passwords")
 
-	def DislpayUserID(self):
-		print("UserID   :  Password")
+			if number:
+				score = score + 1
 
-		self.file2 = open("accounts.csv", 'r')
+			if symbol:
+				score = score + 1
+
+
+			print(f'score = {score}')
+
 		
-		for row in self.file2:
-			line = row.split(',')
+			if score == 1 or score == 2:
+				print("Weak password")
 
-			print(f'{line[0]}  	:  {line[1]}')
+			elif score == 3 or score == 4:
+				print("This password could be improved.")
+			elif score == 5:
+				return password
+				break
+
+	def createUser_id(self):
+		self.user_id = input("Enter a suitable User Id: ")
+
+		if self.user_id in self.user_ids:
+			print("User Id already taken")
+		else:
+			password = Passwords.checkScore()
+
+			self.user_ids.append(self.user_id)
+			account = self.user_id + ", " + password + "\n"
+
+			with open("accounts.csv", 'a') as file1:
+				print(str(account))
+				file1.write(str(account))
+
+	def changePassword(self):
+		user_id = input("Enter the User Id for the account you want change the password: ")
+
+		if user_id in self.user_ids:
+			for account in self.accounts:
+				if user_id in account:
+					password = Passwords.checkScore()
+					account[1] = password + "\n"
+			with open("accounts.csv", 'w') as file2:
+				for account in self.accounts:
+					file2.write(", ".join(account))
+			# print(self.accounts)
+
+		else:
+			print("User Id does not exist")
+
+	def dislpayUser_id(self):
+		print("user_ids")
+
+		for item in self.user_ids:
+			print(item)
+
+		
 
 p = Passwords()
 
 while True:
-	print("\n\n\t\t\t*********Passwords Storage************\n\n")
+	print(r"""
+	    _____   _____   ______   ______   _       _   _______   _    __       _   _______
+	   |  _  | |___  | |  ____| |  ____| | |     | | |  ___  | | | _/_/      | | |  _____|
+	   | |_| |  ___| | | |____  | |____	 | | __  | | | |   | | | |/ /  _____ | | | |_____
+	   |  ___| |  _  | |____  | |____  | | |/  \ | | | |   | | |  _/  /  __ '| | |_____  |
+	   | |	   | |_| |  ____| |  ____| | |   /\ \| | | |___| | | |   |  (__| | |  _____| |
+	   |_|	   |_____| |______| |______| |__/  \___| |_______| |_|    \______|_| |_______|
+		""")
 	print("\t1) Create a new User ID\n")
 	print("\t2) Change a password\n")
 	print("\t3) Display all User IDs\n")
@@ -72,13 +132,13 @@ while True:
 	choice = int(input("What's your selection: "))
 
 	if choice == 1:
-		p.CreateUserID()
+		p.createUser_id()
 
 	elif choice == 2:
-		p.ChangePassword()
+		p.changePassword()
 
 	elif choice == 3:
-		p.DislpayUserID()
+		p.dislpayUser_id()
 
 	elif choice == 4:
 		exit()
