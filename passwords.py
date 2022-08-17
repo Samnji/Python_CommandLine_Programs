@@ -13,7 +13,7 @@ class Passwords:
 
 		for item in self.accounts:
 			self.user_ids.append(item[0])
-		print(self.user_ids)
+		#print(self.user_ids)
 		#print(self.accounts)
 	def checkScore():
 		while True:
@@ -75,35 +75,54 @@ class Passwords:
 				break
 
 	def createUser_id(self):
-		self.user_id = input("Enter a suitable User Id: ")
+		try_again = True
+		
+		while try_again:	
+			self.user_id = input(r"""Enter a suitable User Id or:
+  type Quit to quit program: """)
 
-		if self.user_id in self.user_ids:
-			print("User Id already taken")
-		else:
-			password = Passwords.checkScore()
+			if self.user_id.lower() == "quit":
+				try_again = False
 
-			self.user_ids.append(self.user_id)
-			account = self.user_id + ", " + password + "\n"
+			else: 
+				if self.user_id in self.user_ids:
+					print("User Id already taken")
+				else:
+					password = Passwords.checkScore()
 
-			with open("accounts.csv", 'a') as file1:
-				print(str(account))
-				file1.write(str(account))
+					self.user_ids.append(self.user_id)
+					account = self.user_id + ", " + password + "\n"
+
+					print(self.user_id)
+					with open("accounts.csv", 'a') as file1:
+						#print(str(account))
+						file1.write(str(account))
 
 	def changePassword(self):
-		user_id = input("Enter the User Id for the account you want change the password: ")
+		try_again = True
 
-		if user_id in self.user_ids:
-			for account in self.accounts:
-				if user_id in account:
-					password = Passwords.checkScore()
-					account[1] = password + "\n"
-			with open("accounts.csv", 'w') as file2:
-				for account in self.accounts:
-					file2.write(", ".join(account))
-			# print(self.accounts)
+		while try_again:
+			user_id = input("""Enter the User Id for the account you want change the password:
+or type Quit to quit program: """)
 
-		else:
-			print("User Id does not exist")
+
+			if self.user_id.lower() == "quit":
+				try_again = False
+
+			else: 
+				if user_id in self.user_ids:
+					for account in self.accounts:
+						if user_id in account:
+							password = Passwords.checkScore()
+							print(password)
+							account[1] = password + "\n"
+					with open("accounts.csv", 'w') as file2:
+						for account in self.accounts:
+							file2.write(", ".join(account))
+					# print(self.accounts)
+
+				else:
+					print("User Id does not exist")
 
 	def dislpayUser_id(self):
 		print("user_ids")
